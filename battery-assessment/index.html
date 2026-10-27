@@ -52,14 +52,14 @@
       <p class="hp" aria-hidden="true"><label>Company <input name="company" tabindex="-1" autocomplete="off"></label></p>
       <div class="grid2">
         <div class="field" data-f="firstname"><label for="f-first">First name</label><input id="f-first" type="text" name="firstname" autocomplete="given-name" required><div class="msg"></div></div>
-        <div class="field" data-f="lastname"><label for="f-last">Last name</label><input id="f-last" type="text" name="lastname" autocomplete="family-name" required><div class="msg"></div></div>
+        <div class="field" data-f="lastname"><label for="f-last">Last name <span class="opt">(optional)</span></label><input id="f-last" type="text" name="lastname" autocomplete="family-name"><div class="msg"></div></div>
       </div>
       <div class="grid2">
         <div class="field" data-f="phone"><label for="f-phone">Mobile</label><input id="f-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" required><div class="msg"></div></div>
         <div class="field" data-f="email"><label for="f-email">Email</label><input id="f-email" type="email" name="email" autocomplete="email" inputmode="email" required><div class="msg"></div></div>
       </div>
       <div class="field" data-f="suburb"><label for="f-suburb">Suburb or postcode</label><input id="f-suburb" type="text" name="suburb" autocomplete="address-level2" required><div class="msg"></div></div>
-      <div class="field" data-f="solar_size" data-summary="solar_size" data-label="Size of your existing solar"><label for="f-solar_size">Size of your existing solar <span class="opt">(optional)</span></label><select id="f-solar_size" name="solar_size"><option value="">Select…</option><option>Not sure</option><option>Under 5 kW</option><option>5 – 7 kW</option><option>7 – 10 kW</option><option>Over 10 kW</option></select><div class="msg"></div></div><fieldset class="field" data-f="priority" data-required-group="priority" data-summary="priority" data-label="What matters most to you?"><legend>What matters most to you?</legend><div class="pills"><label><input type="radio" name="priority" value="Lower bills"><span>Lower bills</span></label><label><input type="radio" name="priority" value="Backup in outages"><span>Backup in outages</span></label><label><input type="radio" name="priority" value="Both"><span>Both</span></label></div><div class="msg"></div></fieldset><fieldset class="field" data-f="timeline" data-required-group="timeline" data-summary="timeline" data-label="When are you looking to install?"><legend>When are you looking to install?</legend><div class="pills"><label><input type="radio" name="timeline" value="Within 1 month"><span>Within 1 month</span></label><label><input type="radio" name="timeline" value="1–3 months"><span>1–3 months</span></label><label><input type="radio" name="timeline" value="3+ months"><span>3+ months</span></label><label><input type="radio" name="timeline" value="Just researching"><span>Just researching</span></label></div><div class="msg"></div></fieldset>
+      <div class="field" data-f="solar_size" data-summary="solar_size" data-label="Size of your existing solar"><label for="f-solar_size">Size of your existing solar <span class="opt">(optional)</span></label><select id="f-solar_size" name="solar_size"><option value="">Select…</option><option>Not sure</option><option>Under 5 kW</option><option>5 – 7 kW</option><option>7 – 10 kW</option><option>Over 10 kW</option></select><div class="msg"></div></div><fieldset class="field" data-f="priority" data-required-group="priority" data-summary="priority" data-label="What matters most to you?"><legend>What matters most to you?</legend><div class="pills"><label><input type="radio" name="priority" value="Lower bills"><span>Lower bills</span></label><label><input type="radio" name="priority" value="Backup in outages"><span>Backup in outages</span></label><label><input type="radio" name="priority" value="Both"><span>Both</span></label></div><div class="msg"></div></fieldset><fieldset class="field" data-f="timeline" data-required-group="timeline" data-summary="timeline" data-label="When are you looking to install?"><legend>When are you looking to install?</legend><div class="pills"><label><input type="radio" name="timeline" value="Within 1 month"><span>Within 1 month</span></label><label><input type="radio" name="timeline" value="1–3 months"><span>1–3 months</span></label><label><input type="radio" name="timeline" value="3+ months"><span>3+ months</span></label><label><input type="radio" name="timeline" value="Just researching"><span>Just researching</span></label></div><div class="msg"></div></fieldset><fieldset class="field" data-f="other_quote" data-summary="other_quote" data-label="Already has a quote from another installer"><legend>Already have a quote from another installer? <span class="opt">(optional)</span></legend><div class="pills"><label><input type="radio" name="other_quote" value="Yes"><span>Yes, review it for me</span></label><label><input type="radio" name="other_quote" value="No"><span>No</span></label></div><div class="msg"></div></fieldset>
       <button class="btn full" type="submit">Book my free assessment <span aria-hidden="true">→</span></button>
       <p class="fine">Free and no obligation. By submitting, you agree that Veralba Energy may contact you about your enquiry by phone, SMS or email. See our <a href="https://veralbaenergy.com.au/privacy-policy/" target="_blank" rel="noopener">privacy policy</a>.</p>
       <div class="testpanel"></div>
@@ -145,6 +145,23 @@
       <h3>What moves the price</h3>
       <ul class="drivers"><li><img src="../assets/icons/battery-darkgreen.svg" alt="" width="42" height="42" loading="lazy"><div><strong>Battery size (kWh)</strong><span>Matched to your evening and overnight use. Bigger isn&rsquo;t always better.</span></div></li><li><img src="../assets/icons/lightning-darkgreen.svg" alt="" width="42" height="42" loading="lazy"><div><strong>Your existing system</strong><span>Most batteries come with their own hybrid inverter that works alongside your current solar. We check your setup to confirm the best fit.</span></div></li><li><img src="../assets/icons/tool-darkgreen.svg" alt="" width="42" height="42" loading="lazy"><div><strong>Switchboard and site</strong><span>Older switchboards or tricky locations can add work. We tell you upfront.</span></div></li><li><img src="../assets/icons/house-darkgreen.svg" alt="" width="42" height="42" loading="lazy"><div><strong>Backup (optional)</strong><span>Power during outages is quoted separately, so you only pay for it if you want it.</span></div></li></ul>
     </div>
+  </div>
+</section>
+
+<section class="s" id="quote-review">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">Already have a quote?</p>
+      <h2>Send it to us. We&rsquo;ll <span class="hl">check it</span> for free.</h2>
+      <p>A cheaper quote isn&rsquo;t always the same system. Before you compare totals, an engineer will go through it with you line by line, even if you end up going with someone else.</p>
+    </div>
+    <ul class="checks">
+      <li>Usable battery capacity in kWh, not just the brand and model name.</li>
+      <li>Which inverter is included, and whether backup and a gateway are part of the price.</li>
+      <li>Switchboard work, warranties and who looks after the system after install.</li>
+      <li>How the federal battery discount has been applied to the total.</li>
+    </ul>
+    <p style="margin-top:28px"><a class="btn" href="#assessment" data-preselect="other_quote=Yes">Get my quote reviewed <span aria-hidden="true">&rarr;</span></a></p>
   </div>
 </section>
 
