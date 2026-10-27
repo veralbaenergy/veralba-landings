@@ -3,6 +3,7 @@
    - Sends to HubSpot (Forms API v3) AND to a backup script on the same server (lead-backup.php)
    - Success if EITHER one lands, so a HubSpot rejection never loses a lead
    - Sends the GA4 `generate_lead` event (gtag → GA4 → imported into Google Ads) only for real leads
+   - Sends the GA4 `phone_click` event when someone taps a tel: link (import into Google Ads as a SECONDARY conversion)
    - TEST mode: ?test=1, or any host that is not *.veralbaenergy.com.au → nothing is sent, no conversion fires
 */
 (function () {
@@ -29,15 +30,31 @@
     thankYouUrl: "../thank-you/",
     backupUrl: "https://veralbaenergy.com.au/lead-backup.php",     // cPanel script: emails the lead + keeps a copy
     liveHostSuffix: "veralbaenergy.com.au", // anywhere else (e.g. a preview link) runs in TEST mode automatically
-    leadEvent: "generate_lead"
+    leadEvent: "generate_lead",
+    phoneEvent: "phone_click"
   };
   /* ========================================================= */
 
-  var form = document.getElementById("assessment");
-  if (!form) return;
-
   var params = new URLSearchParams(location.search);
   var TEST = params.get("test") === "1" || location.hostname.slice(-CONFIG.liveHostSuffix.length) !== CONFIG.liveHostSuffix;
+  var form = document.getElementById("assessment");
+
+  // ---- Phone taps: every tel: link on the page (header, sticky bar, final CTA, footer, error box) ----
+  document.addEventListener("click", function (ev) {
+    var a = ev.target && ev.target.closest ? ev.target.closest('a[href^="tel:"]') : null;
+    if (!a) return;
+    var where = a.closest(".sticky") ? "sticky_bar" : a.closest("header") ? "header" : a.closest("footer") ? "footer" : a.closest(".final") ? "final_cta" : a.closest(".formerror") ? "form_error" : "other";
+    if (TEST) { if (window.console) console.info("TEST mode: " + CONFIG.phoneEvent + " not sent (" + where + ")"); return; }
+    if (typeof window.gtag === "function") {
+      window.gtag("event", CONFIG.phoneEvent, {
+        lead_type: form ? form.getAttribute("data-lead-type") || "unknown" : "unknown",
+        click_location: where
+      });
+    }
+  });
+
+  if (!form) return;
+
   var leadType = form.getAttribute("data-lead-type") || "unknown";
   var errBox = form.querySelector(".formerror");
   var btn = form.querySelector("button[type=submit]");
@@ -98,7 +115,8 @@
     function fail(n, t) { ok = false; setMsg(n, t); if (!first) first = form.elements[n] && (form.elements[n].length && !form.elements[n].tagName ? form.elements[n][0] : form.elements[n]); }
     ["firstname", "lastname", "email", "phone", "suburb"].forEach(function (n) { setMsg(n, ""); });
     if (!val("firstname")) fail("firstname", "Please enter your first name.");
-    if (!val("lastname")) fail("lastname", "Please enter your last name.");
+    // Last name is only checked where the page marks it required (optional on the battery page)
+    if (form.elements.lastname && form.elements.lastname.required && !val("lastname")) fail("lastname", "Please enter your last name.");
     var e = val("email");
     if (!EMAIL_RE.test(e)) fail("email", "Please enter a valid email address.");
     var p = normPhone(val("phone"));
@@ -236,6 +254,14 @@
         errBox.classList.add("show");
         if (window.console) console.warn("Lead submit failed", res);
       }
+    });
+  });
+
+  // ---- "Get my quote reviewed" buttons pre-select the matching answer in the form ----
+  document.querySelectorAll("[data-preselect]").forEach(function (a) {
+    a.addEventListener("click", function () {
+      var p = a.getAttribute("data-preselect").split("="), r = form.querySelector('input[name="' + p[0] + '"][value="' + p[1] + '"]');
+      if (r) r.checked = true;
     });
   });
 
