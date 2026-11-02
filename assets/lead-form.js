@@ -114,7 +114,7 @@
     var ok = true, first = null;
     function fail(n, t) { ok = false; setMsg(n, t); if (!first) first = form.elements[n] && (form.elements[n].length && !form.elements[n].tagName ? form.elements[n][0] : form.elements[n]); }
     ["firstname", "lastname", "email", "phone", "suburb"].forEach(function (n) { setMsg(n, ""); });
-    if (!val("firstname")) fail("firstname", "Please enter your first name.");
+    if (!val("firstname")) fail("firstname", form.elements.lastname ? "Please enter your first name." : "Please enter your name.");
     // Last name is only checked where the page marks it required (optional on the battery page)
     if (form.elements.lastname && form.elements.lastname.required && !val("lastname")) fail("lastname", "Please enter your last name.");
     var e = val("email");
@@ -175,8 +175,14 @@
   function sendHubSpot() {
     if (!CONFIG.hubspotPortalId || !CONFIG.hubspotFormGuid) return Promise.reject(new Error("HubSpot not configured"));
     var fields = [];
+    // Pages with a single "Name" field (no last-name input): split "Jane Smith" into first/last for HubSpot
+    var split = null;
+    if (!form.elements.lastname) {
+      var full = val("firstname").replace(/\s+/g, " "), sp = full.indexOf(" ");
+      split = sp > 0 ? { firstname: full.slice(0, sp), lastname: full.slice(sp + 1) } : { firstname: full, lastname: "" };
+    }
     Object.keys(CONFIG.hubspotFields).forEach(function (k) {
-      var v = k === "phone" ? normPhone(val(k)) : val(k);
+      var v = k === "phone" ? normPhone(val(k)) : (split && (k === "firstname" || k === "lastname")) ? split[k] : val(k);
       if (CONFIG.hubspotFields[k] && v) fields.push({ name: CONFIG.hubspotFields[k], value: v });
     });
     if (CONFIG.hubspotMessageField) fields.push({ name: CONFIG.hubspotMessageField, value: readable() });
@@ -261,7 +267,10 @@
   document.querySelectorAll("[data-preselect]").forEach(function (a) {
     a.addEventListener("click", function () {
       var p = a.getAttribute("data-preselect").split("="), r = form.querySelector('input[name="' + p[0] + '"][value="' + p[1] + '"]');
-      if (r) r.checked = true;
+      if (r) {
+        r.checked = true;
+        var d = r.closest("details"); if (d) d.open = true; // optional questions live in a collapsed "Add details" box
+      }
     });
   });
 
